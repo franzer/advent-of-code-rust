@@ -7,24 +7,8 @@ pub fn part_one(input: &str) -> Option<i32> {
 
     for line in input.lines() {
         let nums: Vec<i32> = line.split_whitespace().filter_map(|number| number.parse().ok()).collect();
-        let mut is_valid = true;
-        let is_increasing = nums[1] > nums[0];
-
-        for window in nums.windows(2) {
-            let diff = (window[1] - window[0]).abs();
-            if diff < 1 || diff > 3 {
-                is_valid = false;
-                break;
-            }
-
-            if (window[1] > window[0]) != is_increasing {
-                is_valid = false;
-                break;
-            }
-        }
-
-        if is_valid {
-            total += 1;
+        if let Ok(_) = validate_sequence(&nums) {
+            total += 1
         }
     }
     Some(total)
