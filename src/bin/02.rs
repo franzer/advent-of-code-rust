@@ -1,5 +1,3 @@
-use std::ops::Index;
-
 advent_of_code::solution!(2);
 
 pub fn part_one(input: &str) -> Option<i32> {
@@ -18,7 +16,7 @@ pub fn part_two(input: &str) -> Option<i32> {
     let mut total: i32 = 0;
 
     for line in input.lines() {
-        let mut nums: Vec<i32> = line.split_whitespace().filter_map(|number| number.parse().ok()).collect();
+        let nums: Vec<i32> = line.split_whitespace().filter_map(|number| number.parse().ok()).collect();
         if let Ok(_) = validate_sequence(&nums) {
             total += 1;
             continue;
@@ -42,6 +40,7 @@ pub fn part_two(input: &str) -> Option<i32> {
     Some(total)
 }
 
+#[allow(dead_code)]
 enum ValidationError {
     InvalidDifference(usize),
     InconsistentDirection(usize),
