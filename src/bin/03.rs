@@ -1,7 +1,5 @@
 advent_of_code::solution!(3);
 
-use std::{collections::btree_map::Values, result};
-
 use regex::Regex;
 use once_cell::sync::Lazy;
 
