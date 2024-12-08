@@ -17,34 +17,36 @@ fn find_antinodes(positions: &[(usize, usize)], bounds: (usize, usize), check_di
         .map(|&(y, x)| (y as i32, x as i32))
         .collect();
 
-    println!("\nChecking positions: {:?}", positions);
-
+    // For part 2, include antenna positions as antinodes
     if !check_distance && positions.len() > 1 {
-        println!("Adding antenna positions as antinodes");
         antinodes.extend(positions.iter().map(|&(y, x)| (y as usize, x as usize)));
     }
 
-    'outer: for y in 0..bounds.0 as i32 {
-        'point: for x in 0..bounds.1 as i32 {
+    for y in 0..bounds.0 as i32 {
+        for x in 0..bounds.1 as i32 {
             let p = (y, x);
 
-            if !check_distance {
-                let mut collinear_count = 0;
-                let mut collinear_with = Vec::new();
-
-
+            if check_distance {
+                // Part 1 logic: Check manhattan distances
                 for i in 0..positions.len() {
                     for j in (i+1)..positions.len() {
                         if is_collinear(positions[i], positions[j], p) {
-                            collinear_with.push((positions[i], positions[j]));
-                            collinear_count += 1;
+                            let d1 = manhattan_distance(p, positions[i]);
+                            let d2 = manhattan_distance(p, positions[j]);
 
-                            // If we found a collinear pair, this is an antinode
-                            if collinear_count > 0 {
-                                println!("Found point {:?} collinear with {:?}", p, collinear_with);
+                            if (d1 == 2 * d2) || (d2 == 2 * d1) {
                                 antinodes.push((y as usize, x as usize));
-                                continue 'point;
                             }
+                        }
+                    }
+                }
+            } else {
+                // Part 2 logic: Check collinearity only
+                for i in 0..positions.len() {
+                    for j in (i+1)..positions.len() {
+                        if is_collinear(positions[i], positions[j], p) {
+                            antinodes.push((y as usize, x as usize));
+                            break;
                         }
                     }
                 }
@@ -52,7 +54,6 @@ fn find_antinodes(positions: &[(usize, usize)], bounds: (usize, usize), check_di
         }
     }
 
-    println!("Found antinodes: {:?}", antinodes);
     antinodes
 }
 
